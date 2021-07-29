@@ -22,7 +22,8 @@ It will output the numbers 0 to 11 unordered with a delay of 1 second per number
 If an exception gets thrown the exception will be pushed out after the `ForEach` call.
 
 ```csharp
-await ParallelLoops.ForEach<int, object>(Enumerable.Range(0, 12), async (number, holder) => {
+await ParallelLoops.ForEach<int, object>(Enumerable.Range(0, 12),
+    async (number, holder) => {
     Console.WriteLine($" * {number}");
 
     if (number == 4)
