@@ -22,8 +22,7 @@ It will output the numbers 0 to 11 unordered with a delay of 1 second per number
 If an exception gets thrown the exception will be pushed out after the `ForEach` call.
 
 ```csharp
-await ParallelLoops.ForEach<int, object>(Enumerable.Range(0, 12),
-    async (number, holder) => {
+await ParallelLoops.ForEach<int, object>(Enumerable.Range(0, 12), async (number, holder) => {
     Console.WriteLine($" * {number}");
 
     if (number == 4)
@@ -77,7 +76,8 @@ This is a maximum example with all parameters setup. It is used to execute an in
 1. The `finalize` method will be called for each thread created and should dispose whatever necessary in the given holder class.
 
 ```csharp
-await ParallelLoops.ForEach<DatabaseTaskMetaInfos, SqlConnection>(list<DatabaseTaskMetaInfos>, async (dbTasks, connection) => {
+await ParallelLoops.ForEach<DatabaseTaskMetaInfos, SqlConnection>(list<DatabaseTaskMetaInfos>,
+    async (dbTasks, connection) => {
     await dbTasks.DoIt(connection);
 }, exception: async (number, connection, exception) => {
     Console.WriteLine($" => Oh no, error: {exception.Message}");
