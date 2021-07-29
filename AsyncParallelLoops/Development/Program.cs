@@ -1,7 +1,7 @@
 ﻿using SharpFast.Async;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Development
@@ -10,12 +10,7 @@ namespace Development
     {
         static async Task Main(string[] args)
         {
-            List<int> list = new List<int>();
-
-            for (int i = 0; i < 100; i++)
-                list.Add(i);
-
-            await ParallelLoops.ForEach<int, SqlConnection>(list, async (number, holder) => {
+            await ParallelLoops.ForEach<int, SqlConnection>(Enumerable.Range(0, 100), async (number, holder) => {
                 Console.WriteLine($" * {number}");
 
                 if (number == 16)
@@ -23,15 +18,10 @@ namespace Development
 
                 await Task.Delay(1000);
             }, exception: async (number, holder, exception) => {
-                Console.WriteLine($" => Oh nein, ein Fehler bei {number}: {exception.Message}");
+                Console.WriteLine($" => Oh nein, an error at {number}: {exception.Message}");
             }, init: async () => {
-                SqlConnection connection = new SqlConnection("string");
-
-                await connection.OpenAsync();
-
-                return connection;
+                return null;
             }, finalize: async (sqlConnection) => {
-                await sqlConnection.DisposeAsync();
             }, threads: 7);
         }
     }
